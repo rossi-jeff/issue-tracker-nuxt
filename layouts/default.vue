@@ -11,3 +11,9 @@
         <slot />
     </main>
 </template>
+
+<style lang="postcss">
+.card {
+    @apply p-2 mb-2 mx-2 border border-black;
+}
+</style>
