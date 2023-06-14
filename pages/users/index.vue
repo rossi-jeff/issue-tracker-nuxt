@@ -1,6 +1,7 @@
 <template>
     <div id="users-content">
         <h1>Users</h1>
+        <UserCard v-for="user of state.Users" :key="user.Id" :user="user" />
     </div>
 </template>
 
