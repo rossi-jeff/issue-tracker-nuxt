@@ -1,7 +1,19 @@
 <template>
   <div id="issues-content">
     <h1>Issues</h1>
-    <IssueCard v-for="issue of state.Issues" :key="issue.UUID" :issue="issue" />
+    <IssueCard
+      v-for="issue of state.Paginated"
+      :key="issue.UUID"
+      :issue="issue"
+    />
+    <PaginationControls
+      :count="state.count"
+      :offset="state.offset"
+      :limit="state.limit"
+      @limit-changed="limitChanged"
+      @page-changed="pageChanged"
+      v-if="show"
+    />
   </div>
 </template>
 
@@ -15,7 +27,17 @@ import { reactive, onMounted } from "vue";
 let Issues: IssueType[] = reactive([]);
 let Users: UserType[] = reactive([]);
 let Projects: ProjectType[] = reactive([]);
-const state = reactive({ Issues, Users, Projects });
+let Paginated: IssueType[] = reactive([]);
+const state = reactive({
+  Issues,
+  Users,
+  Projects,
+  Paginated,
+  count: 0,
+  limit: 10,
+  offset: 0,
+});
+const show = ref(false);
 
 const loadData = async () => {
   const issueReq = fetch(`${apiUrl}/issue`);
@@ -35,7 +57,33 @@ const loadData = async () => {
   state.Issues = issues;
   state.Users = users;
   state.Projects = projects;
-  console.log({ state });
+  state.count = issues.length;
+  setPaginated();
+};
+
+const setPaginated = () => {
+  state.Paginated = state.Issues.slice(
+    state.offset,
+    state.offset + state.limit
+  );
+  show.value = true;
+};
+
+const pageChanged = (page: number) => {
+  state.offset = (page - 1) * state.limit;
+  show.value = false;
+  setTimeout(() => {
+    setPaginated();
+  }, 25);
+};
+
+const limitChanged = (perPage: number) => {
+  state.limit = perPage;
+  state.offset = 0;
+  show.value = false;
+  setTimeout(() => {
+    setPaginated();
+  }, 25);
 };
 
 onMounted(() => loadData());
