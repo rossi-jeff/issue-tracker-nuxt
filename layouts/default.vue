@@ -1,5 +1,6 @@
 <template>
 	<main id="default-layout">
+		<AuthDialogs />
 		<div class="flex flex-wrap justify-between">
 			<NuxtLink to="/">Home</NuxtLink>
 			<NuxtLink to="/dashboard">Dashboard</NuxtLink>
@@ -19,7 +20,15 @@
 .filter-content {
 	@apply my-2 border border-dotted border-black p-2 hidden transition;
 }
-.filter-content.open {
+.modal-overlay {
+	@apply fixed inset-0 bg-gray-500 bg-opacity-70 overflow-y-auto w-full h-full hidden;
+}
+.modal-30p {
+	@apply w-[30%] border border-black p-2 bg-white mx-auto hidden relative top-24;
+}
+.filter-content.open,
+.modal-overlay.open,
+.modal-30p.open {
 	@apply block;
 }
 </style>
