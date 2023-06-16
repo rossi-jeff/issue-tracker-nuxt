@@ -29,10 +29,14 @@
 .modal-40p {
   @apply w-[40%] border border-black p-2 bg-white mx-auto hidden relative top-24;
 }
+.modal-60p {
+  @apply w-[60%] border border-black p-2 bg-white mx-auto hidden relative top-24;
+}
 .filter-content.open,
 .modal-overlay.open,
 .modal-30p.open,
-.modal-40p.open {
+.modal-40p.open,
+.modal-60p.open {
   @apply block;
 }
 </style>
