@@ -11,6 +11,7 @@
       />
       <div class="flex flex-wrap justify-between">
         <button @click="hideNew">Cancel</button>
+        <button @click="emit('createIssue')">Create Issue</button>
       </div>
     </div>
     <!--edit issue-->
@@ -24,6 +25,7 @@
       />
       <div class="flex flex-wrap justify-between">
         <button @click="hideEdit">Cancel</button>
+        <button @click="emit('updateIssue')">Update Issue</button>
       </div>
     </div>
   </div>
@@ -39,6 +41,7 @@ const props = defineProps<{
   projects: ProjectType[];
   users: UserType[];
 }>();
+const emit = defineEmits(["createIssue", "updateIssue"]);
 
 const showOverlay = () => {
   const overlay = document.getElementById("issue-overlay");

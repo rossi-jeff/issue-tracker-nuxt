@@ -22,6 +22,8 @@
       :projects="state.Projects"
       :users="state.Users"
       ref="overlay"
+      @create-issue="createIssue"
+      @update-issue="updateIssue"
     />
   </div>
 </template>
@@ -32,6 +34,7 @@ import { IssueType } from "../../types/issue.type";
 import { UserType } from "../../types/user.type";
 import { ProjectType } from "../../types/project.type";
 import { reactive, onMounted } from "vue";
+import { RemoveBlanks } from "../../utils/remove-blanks";
 
 let Issues: IssueType[] = reactive([]);
 let Users: UserType[] = reactive([]);
@@ -119,6 +122,48 @@ const editIssue = (uuid: string) => {
   const issue = state.Issues.find((i) => i.UUID == uuid);
   editor.edit = issue ? clone(issue) : {};
   overlay.value.showEdit();
+};
+
+const createIssue = async () => {
+  const payload = RemoveBlanks(editor.new, true);
+  const result = await fetch(`${apiUrl}/issue`, {
+    method: "POST",
+    body: JSON.stringify(payload),
+    headers: buildHeaders(session),
+  });
+  if (result.ok) {
+    const issue = await result.json();
+    state.Issues.push(issue);
+    state.count = state.Issues.length;
+    show.value = false;
+    overlay.value.hideNew();
+    setTimeout(() => {
+      setPaginated();
+    }, 25);
+  }
+};
+
+const updateIssue = async () => {
+  const { UUID, ...rest } = editor.edit;
+  const payload = RemoveBlanks(rest, true);
+  if (!UUID) return;
+  const result = await fetch(`${apiUrl}/issue/${UUID}`, {
+    method: "PATCH",
+    body: JSON.stringify(payload),
+    headers: buildHeaders(session),
+  });
+  if (result.ok) {
+    const issue = await result.json();
+    const idx = state.Issues.findIndex((i) => i.UUID == UUID);
+    if (idx != -1) {
+      state.Issues[idx] = issue;
+      show.value = false;
+      overlay.value.hideEdit();
+      setTimeout(() => {
+        setPaginated();
+      }, 25);
+    }
+  }
 };
 
 onMounted(() => loadData());
