@@ -1,6 +1,9 @@
 <template>
 	<div id="time-clocks-content">
 		<h1>Time Clocks</h1>
+		<button @click="newTimeClock" v-if="session.signedIn">
+			New Time Clock
+		</button>
 		<TimeClockFilter
 			:users="state.Users"
 			:projects="state.Projects"
@@ -11,6 +14,7 @@
 			v-for="timeClock of state.Paginated"
 			:key="timeClock.Id"
 			:timeClock="timeClock"
+			@edit-time-clock="editTimeClock"
 		/>
 		<PaginationControls
 			:count="state.count"
@@ -19,6 +23,15 @@
 			@limit-changed="limitChanged"
 			@page-changed="pageChanged"
 			v-if="show"
+		/>
+		<TimeClockDialogs
+			:editor="editor"
+			:users="state.Users"
+			:issues="state.Issues"
+			:projects="state.Projects"
+			ref="overlay"
+			@create-time-clock="createTimeClock"
+			@update-time-clock="updateTimeClock"
 		/>
 	</div>
 </template>
@@ -47,6 +60,12 @@ const state = reactive({
 	offset: 0,
 })
 const show = ref(false)
+const overlay = ref()
+const editor: { [key: string]: TimeClockType } = reactive({
+	new: { Start: {}, End: {} },
+	edit: { Start: {}, End: {} },
+})
+const session = useUserSessionStore()
 
 const loadData = async () => {
 	const issueReq = fetch(`${apiUrl}/issue`)
@@ -110,6 +129,60 @@ const filterTimeClocks = async (url: string) => {
 		setTimeout(() => {
 			setPaginated()
 		}, 25)
+	}
+}
+
+const newTimeClock = () => {
+	overlay.value.showNew()
+}
+
+const editTimeClock = (uuid: string) => {
+	const timeClock = state.TimeClocks.find((t) => t.UUID == uuid)
+	editor.edit = timeClock ? clone(timeClock) : { Start: {}, End: {} }
+	overlay.value.showEdit()
+}
+
+const createTimeClock = async () => {
+	const payload = RemoveBlanks(editor.new)
+	const result = await fetch(`${apiUrl}/timeclock`, {
+		method: 'POST',
+		body: JSON.stringify(payload),
+		headers: buildHeaders(session),
+	})
+	if (result.ok) {
+		const timeClock = await result.json()
+		state.TimeClocks.push(timeClock)
+		state.count = state.TimeClocks.length
+		show.value = false
+		overlay.value.hideNew()
+		setTimeout(() => {
+			setPaginated()
+		}, 25)
+	}
+}
+
+const updateTimeClock = async () => {
+	const { Start, End, UUID, ...rest } = editor.edit
+	const sanitized = RemoveBlanks(rest, true)
+	const payload = { ...sanitized }
+	if (Start.Date && Start.Time) payload.Start = Start
+	if (End.Date && End.Time) payload.End = End
+	const result = await fetch(`${apiUrl}/timeclock/${UUID}`, {
+		method: 'PATCH',
+		body: JSON.stringify(payload),
+		headers: buildHeaders(session),
+	})
+	if (result.ok) {
+		const timeClock = await result.json()
+		const idx = state.TimeClocks.findIndex((t) => t.UUID == UUID)
+		if (idx != -1) {
+			state.TimeClocks[idx] = timeClock
+			show.value = false
+			overlay.value.hideEdit()
+			setTimeout(() => {
+				setPaginated()
+			}, 25)
+		}
 	}
 }
 
