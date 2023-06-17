@@ -1,6 +1,7 @@
 <template>
   <div id="users-content">
     <h1>Users</h1>
+    <NuxtLink to="/users/new" v-if="session.signedIn">New User</NuxtLink>
     <UserCard v-for="user of state.Paginated" :key="user.Id" :user="user" />
     <PaginationControls
       :count="state.count"
@@ -22,6 +23,7 @@ let Users: UserType[] = reactive([]);
 let Paginated: UserType[] = reactive([]);
 const state = reactive({ Users, Paginated, count: 0, limit: 10, offset: 0 });
 const show = ref(false);
+const session = useUserSessionStore();
 
 const loadData = async () => {
   const result = await fetch(`${apiUrl}/user`);
