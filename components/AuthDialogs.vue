@@ -1,5 +1,5 @@
 <template>
-	<div id="suth-dialogs">
+	<div id="auth-dialogs" class="mx-2">
 		<!-- buttons -->
 		<button v-if="!session.signedIn" @click="showSignIn">Sign In</button>
 		<span v-if="session.signedIn" class="mr-4">{{ session.UserName }}</span>
