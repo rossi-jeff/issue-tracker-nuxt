@@ -1,8 +1,10 @@
 <template>
-	<div id="auth-dialogs" class="mx-2">
+	<div id="auth-dialogs">
 		<!-- buttons -->
 		<button v-if="!session.signedIn" @click="showSignIn">Sign In</button>
-		<span v-if="session.signedIn" class="mr-4">{{ session.UserName }}</span>
+		<span v-if="session.signedIn" class="mr-4">
+			<NuxtLink :to="`/users/${session.UUID}`">{{ session.UserName }}</NuxtLink>
+		</span>
 		<button v-if="session.signedIn" @click="signOut">Sign Out</button>
 
 		<!-- modals -->

@@ -10,7 +10,7 @@
 				:projects="props.projects"
 				:users="props.users"
 			/>
-			<div class="flex flex-wrap justify-between">
+			<div class="flex flex-wrap justify-between mt-2">
 				<button @click="hideNew">Cancel</button>
 				<button @click="emit('createTimeClock')">Create Time Clock</button>
 			</div>
@@ -25,7 +25,7 @@
 				:projects="props.projects"
 				:users="props.users"
 			/>
-			<div class="flex flex-wrap justify-between">
+			<div class="flex flex-wrap justify-between mt-2">
 				<button @click="hideEdit">Cancel</button>
 				<button @click="emit('updateTimeClock')">Update Time Clock</button>
 			</div>

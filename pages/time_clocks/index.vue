@@ -1,9 +1,11 @@
 <template>
 	<div id="time-clocks-content">
-		<h1>Time Clocks</h1>
-		<button @click="newTimeClock" v-if="session.signedIn">
-			New Time Clock
-		</button>
+		<div class="flex flex-wrap mb-2">
+			<h1>Time Clocks</h1>
+			<button @click="newTimeClock" v-if="session.signedIn" class="ml-4">
+				New Time Clock
+			</button>
+		</div>
 		<TimeClockFilter
 			:users="state.Users"
 			:projects="state.Projects"
