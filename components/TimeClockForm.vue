@@ -74,11 +74,6 @@ const props = defineProps<{
 </script>
 
 <style lang="postcss" scoped>
-input,
-textarea,
-select {
-	@apply border border-black rounded px-2 py-1;
-}
 label {
 	@apply font-bold block;
 }

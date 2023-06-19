@@ -12,7 +12,8 @@
     "@nuxt/devtools": "latest",
     "@nuxtjs/tailwindcss": "^6.7.2",
     "@types/node": "^18",
-    "nuxt": "^3.5.2"
+    "nuxt": "^3.5.2",
+    "tw-colors": "^1.2.6"
   },
   "overrides": {
     "vue": "latest"
