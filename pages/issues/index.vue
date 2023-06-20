@@ -1,5 +1,8 @@
 <template>
 	<div id="issues-content">
+		<Head>
+			<Title>Issue Tracker | Issues</Title>
+		</Head>
 		<div class="flex flex-wrap mb-2">
 			<h1>Issues</h1>
 			<button @click="newIssue" v-if="session.signedIn" class="ml-4">
@@ -29,6 +32,7 @@
 			@create-issue="createIssue"
 			@update-issue="updateIssue"
 		/>
+		<SignInAlert v-if="!session.signedIn" />
 	</div>
 </template>
 

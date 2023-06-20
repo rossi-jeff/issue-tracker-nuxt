@@ -1,16 +1,30 @@
 <template>
 	<div>
-		<button
-			@click="state.editing = !state.editing"
-			v-if="session.signedIn"
-			class="mb-2"
-		>
-			Edit
-		</button>
+		<Head>
+			<Title>Issue Tracker | Edit User</Title>
+		</Head>
+		<div v-if="state.User" class="flex flex-wrap">
+			<h1>{{ getFullName(state.User) }}</h1>
+			<div class="mx-4" v-if="state.User.Credentials">
+				({{ state.User.Credentials.Username }})
+			</div>
+			<button
+				@click="state.editing = !state.editing"
+				v-if="session.signedIn"
+				class="mb-2"
+			>
+				Edit
+			</button>
+		</div>
 
 		<div v-if="state.editing" class="card">
 			<h2>Edit User</h2>
-			<UserForm :user="state.User" :show-pass="false" />
+			<div>
+				<UserForm :user="state.User" :show-pass="false" />
+				<div class="text-right mt-2">
+					<button @click="updateUser">Update User</button>
+				</div>
+			</div>
 			<h3>Roles</h3>
 			<div class="flex flex-wrap justify-between mb-2">
 				<div v-for="(r, i) of UserRoleArray" :key="i">
@@ -74,6 +88,7 @@
 			<h3>Emails</h3>
 			<EmailList :emails="state.User.Emails || []" :show-buttons="false" />
 		</div>
+		<SignInAlert v-if="!session.signedIn" />
 	</div>
 </template>
 
@@ -208,6 +223,16 @@ const deletePhone = async (uuid: string) => {
 		const idx = state.User.Phones.findIndex((p) => p.UUID == uuid)
 		if (idx != -1) state.User.Phones.splice(idx, 1)
 	}
+}
+
+const updateUser = async () => {
+	const { Name, Credentials, Roles, UUID } = state.User
+	const result = await fetch(`${apiUrl}/user/${UUID}`, {
+		method: 'PATCH',
+		body: JSON.stringify({ Name, Credentials, Roles }),
+		headers: buildHeaders(session),
+	})
+	if (result.ok) loadUser()
 }
 
 onMounted(() => loadUser())

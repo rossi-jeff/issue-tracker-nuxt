@@ -1,5 +1,8 @@
 <template>
 	<div id="time-clocks-content">
+		<Head>
+			<Title>Issue Tracker | Time Clocks</Title>
+		</Head>
 		<div class="flex flex-wrap mb-2">
 			<h1>Time Clocks</h1>
 			<button @click="newTimeClock" v-if="session.signedIn" class="ml-4">
@@ -35,6 +38,7 @@
 			@create-time-clock="createTimeClock"
 			@update-time-clock="updateTimeClock"
 		/>
+		<SignInAlert v-if="!session.signedIn" />
 	</div>
 </template>
 

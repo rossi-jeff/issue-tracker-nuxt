@@ -1,5 +1,8 @@
 <template>
 	<div id="users-content">
+		<Head>
+			<Title>Issue Tracker | Users</Title>
+		</Head>
 		<div class="flex flex-wrap mb-2">
 			<h1>Users</h1>
 			<NuxtLink to="/users/new" v-if="session.signedIn" class="ml-4"
@@ -15,6 +18,7 @@
 			@page-changed="pageChanged"
 			v-if="show"
 		/>
+		<SignInAlert v-if="!session.signedIn" />
 	</div>
 </template>
 

@@ -17,7 +17,11 @@
 					<button @click="hideSignIn">Cancel</button>
 					<button @click="signIn">Sign In</button>
 				</div>
+				<div class="alert">
+					Randomly generated users share the password <span class="px-2 py-1 bg-white text-black">S3cr3t!!</span>
+				</div>
 			</div>
+
 		</div>
 	</div>
 </template>

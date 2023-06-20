@@ -1,10 +1,13 @@
 <template>
 	<div class="card">
+		<Head>
+			<Title>Issue Tracker | New User</Title>
+		</Head>
 		<div>
 			<h2>New User</h2>
 			<UserForm :user="state.User" :show-pass="true" />
 			<div class="text-right mt-2">
-				<button>Save User</button>
+				<button @click="createUser">Save User</button>
 			</div>
 		</div>
 		<h3>Roles</h3>
@@ -50,6 +53,7 @@
 			@update-email="updateEmail"
 			@update-phone="updatePhone"
 		/>
+		<SignInAlert v-if="!session.signedIn" />
 	</div>
 </template>
 
@@ -71,6 +75,7 @@ let Phone: PhoneType = reactive({})
 let Email: EmailType = reactive({})
 const state = reactive({ User, Phone, Email })
 const overlay = ref()
+const session = useUserSessionStore()
 
 const newEmail = () => {
 	overlay.value.showNewEmail()
@@ -140,5 +145,23 @@ const deletePhone = (uuid: string) => {
 	if (!state.User.Phones) state.User.Phones = []
 	const idx = state.User.Phones.findIndex((p) => p.UUID == uuid)
 	if (idx != -1) state.User.Phones.splice(idx, 1)
+}
+
+const createUser = async () => {
+	const { Name, Credentials, Roles, Emails, Phones } = state.User
+	const result = await fetch(`${apiUrl}/register`, {
+		method: 'POST',
+		body: JSON.stringify({ Name, Credentials, Roles, Emails, Phones }),
+		headers: buildHeaders(session),
+	})
+	if (result.ok) {
+		state.User = {
+			Name: {},
+			Credentials: {},
+			Roles: [],
+			Phones: [],
+			Emails: [],
+		}
+	}
 }
 </script>
