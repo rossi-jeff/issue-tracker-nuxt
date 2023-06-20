@@ -64,7 +64,10 @@
 						v-model="filter.EndDate"
 					/>
 				</div>
-				<button @click="clearFilters">Clear Filters</button>
+				<div>
+					<label>&nbsp;</label>
+					<button @click="clearFilters">Clear Filters</button>
+				</div>
 			</div>
 		</div>
 	</div>

@@ -51,14 +51,29 @@ textarea,
 button {
 	@apply px-2 py-1 bg-light text-dark border border-dark text-sm;
 }
+.text-shadow {
+	text-shadow: 1px 1px 2px #444;
+}
 h1 {
-	@apply text-2xl font-extrabold text-altDark;
+	@apply text-2xl font-extrabold text-altDark text-shadow mb-2;
 }
 h2 {
-	@apply text-xl font-bold;
+	@apply text-xl font-bold text-shadow mb-1;
 }
 h3 {
-	@apply text-lg font-bold;
+	@apply text-lg font-bold text-shadow;
+}
+#header-bar h1 {
+	@apply text-dark;
+}
+.dark #header-bar h1 {
+	@apply text-light;
+}
+a {
+	@apply font-bold;
+}
+a:hover {
+	@apply underline;
 }
 .dark h1 {
 	@apply text-altLight;
@@ -72,6 +87,7 @@ h3 {
 button:hover {
 	@apply bg-altLight;
 }
+
 .dark button:hover {
 	@apply bg-altDark;
 }
@@ -119,6 +135,28 @@ button:hover {
 	@apply flex flex-wrap justify-between bg-dark text-light mb-2 px-2;
 }
 .dark .list-header {
+	@apply bg-light text-dark;
+}
+.card button:hover,
+.modal-30p button:hover,
+.modal-40p button:hover,
+.modal-50p button:hover,
+.modal-60p button:hover,
+.modal-fit button:hover {
+	@apply bg-dark text-light;
+}
+.dark .card button:hover,
+.dark .modal-30p button:hover,
+.dark .modal-40p button:hover,
+.dark .modal-50p button:hover,
+.dark .modal-60p button:hover,
+.dark .modal-fit button:hover {
+	@apply bg-light text-dark;
+}
+.alert {
+	@apply bg-dark text-light p-2 my-2;
+}
+.dark .alert {
 	@apply bg-light text-dark;
 }
 </style>

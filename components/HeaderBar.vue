@@ -1,6 +1,13 @@
 <template>
 	<div id="header-bar" class="card m-2">
-		<AuthDialogs />
+		<div class="flex flex-wrap justify-between">
+			<div class="flex flex-wrap">
+				<h1>Issue</h1>
+				<span class="mx-2 mt-2">|</span>
+				<h1>Tracker</h1>
+			</div>
+			<AuthDialogs />
+		</div>
 		<div class="flex flex-wrap justify-between">
 			<NuxtLink to="/">Home</NuxtLink>
 			<NuxtLink to="/dashboard">Dashboard</NuxtLink>

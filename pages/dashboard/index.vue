@@ -1,5 +1,8 @@
 <template>
 	<div id="dashboard-content">
+		<Head>
+			<Title>Issue Tracker | Dashboard</Title>
+		</Head>
 		<h1 class="mb-2">Dashboard</h1>
 		<div class="flex flex-wrap justify-between">
 			<div class="dash-board-column-container">
@@ -102,6 +105,7 @@
 				/>
 				<div class="scroll-space"></div>
 			</div>
+			<SignInAlert v-if="!session.signedIn" />
 		</div>
 
 		<DashboardDialogs ref="overlay" @set-status="setOtherStatus" />
